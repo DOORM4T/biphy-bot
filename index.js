@@ -9,9 +9,7 @@ let audioPlayer = {
   volume: 0.2,
   dispatcher: null,
   currentAudio: null,
-  audioUrl: null,
-  loop: false,
-  stream: null
+  audioUrl: null
 };
 
 client.once('ready', () => {
@@ -46,6 +44,9 @@ client.on('message', async message => {
 
   // Play (!play <url>)
   require('./commands/play.js')(message, audioPlayer);
+
+  // Stop (!stop)
+  require('./commands/stop.js')(message, audioPlayer);
 
   // Set Volume (!volume <level>, !vol <level>)
   require('./commands/volume.js')(message, audioPlayer);

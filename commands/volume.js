@@ -30,6 +30,7 @@ const volume = (message, audioPlayer) => {
       message.delete(); // Delete user command
       message.channel.send(`\`\`\`Set volume to ${level * 100}%\`\`\``);
     } catch (err) {
+      message.delete();
       message.channel.send(
         `\`\`\`I had a problem setting your volume. Is there audio playing right now?\`\`\``
       );

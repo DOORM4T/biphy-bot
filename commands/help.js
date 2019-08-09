@@ -14,8 +14,11 @@ const help = message => {
             BIPHY'S COMMANDS
 ==============================================
 
-> !h, !help =>  Sends the list of available commands.
-> !r xdy    =>  Roll a "y" sided die "x" times. 
+> !help, !h             =>  Sends the list of available commands.
+> !r <x>d<y>                =>  Roll a "y" sided die "x" times. 
+> !play <audio_url>     =>  Plays audio your current Voice Channel.
+> !stop                 =>  Stops current audio.
+> !volume, !v <level>   =>  Modifies current audio volume. Max is 1.5 (150%).
     \`\`\``);
   }
 };

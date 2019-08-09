@@ -44,33 +44,6 @@ const play = async (message, audioPlayer) => {
     const audio = await ytdl.getInfo(args[1]); // Get video url from ytdl
     const { title, video_url } = audio;
 
-    // Delete user command
-    message.delete();
-
-    // Send message
-    message.channel.send(
-      `${message.author} \`\`\`Now playing ${title} \n(${video_url})\`\`\``
-    );
-
-    // Set global audioPlayer object dispatcher property for use in other commands like !volume and !stop
-    audioPlayer.dispatcher = audioPlayer.connection
-      .playStream(ytdl(video_url))
-      .on('end', () => {
-        // Loop if specified
-        if (message.content.endsWith('loop')) {
-          // Call play recursively
-          //   play(message, audioPlayer);
-        } else {
-          voiceChannel.leave();
-          resetPlayer('Ended.');
-        }
-      })
-      .on('error', err => {
-        voiceChannel.leave();
-        resetPlayer(err.message);
-      });
-    audioPlayer.dispatcher.setVolume(audioPlayer.volume);
-
     // Set current audio name
     audioPlayer.currentAudio = title;
 
@@ -79,6 +52,36 @@ const play = async (message, audioPlayer) => {
 
     // Set audioPlayer
     audioPlayer.voiceChannel = voiceChannel;
+
+    // Delete user command
+    message.delete();
+
+    // Send message
+    message.channel.send(
+      `${message.author} \`\`\`Now playing ${title} \n(${video_url})\`\`\``
+    );
+    playAudio();
+
+    // Set global audioPlayer object dispatcher property for use in other commands like !volume and !stop
+    function playAudio() {
+      audioPlayer.dispatcher = audioPlayer.connection
+        .playStream(ytdl(video_url))
+        .on('end', () => {
+          // Loop if specified
+          if (message.content.endsWith('loop')) {
+            // Call play recursively
+            //   play(message, audioPlayer);
+          } else {
+            voiceChannel.leave();
+            resetPlayer('Ended.');
+          }
+        })
+        .on('error', err => {
+          voiceChannel.leave();
+          resetPlayer(err.message);
+        });
+      audioPlayer.dispatcher.setVolume(audioPlayer.volume);
+    }
   }
 
   /** Resets audioPlayer fields related to the played audio
