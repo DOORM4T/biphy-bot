@@ -27,3 +27,6 @@
 ```
 
 <img id="biphy" alt="Biphy character and art by fellow Headhunter @Julz Bananz" src="https://cdn.discordapp.com/attachments/588918874272038932/613085069824884899/Biphy.png" width=200 style="width:20%;position: absolute;top:0;right:-60px;transform:rotate(-45deg)">
+<hr>
+
+`Biphy character and art by fellow Headhunter @Julz Bananz`
