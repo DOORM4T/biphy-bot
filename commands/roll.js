@@ -10,32 +10,53 @@ const { prefix } = require('../config.json');
  */
 const rollDice = message => {
   if (message.content.startsWith(`${prefix}r `)) {
-    let roll = message.content.slice(3),
-      num = +roll.slice(0, roll.indexOf('d')),
-      dice = roll.slice(roll.indexOf('d') + 1, roll.length),
-      result = 0;
+    let msg = message.content.slice(3);
+    msg.replace(new RegExp(/[\D\s]/g), '');
+    let args = msg.split(/[dx]/); // \s=whitespace, d=#dice, x=#times
 
-    // Remove all characters after #dice, if any
-    // !r 1d12please ol buddy ol friend => dice === 12
-    if (isNaN(typeof +dice)) {
-      dice = dice.replace(new RegExp(/\D/g), '');
+    // Destructure dice info from args
+    let [num, dice, times] = args;
+
+    // Convert each value to an integer
+    +num, +dice, +times;
+
+    // If no "times"
+    if (!times) {
+      times = 1;
+      console.log('Setting times to 1');
     }
 
-    if (num > 100) num = 100;
-    if (dice > 100) dice = 100;
+    // Set limit.
+    if (num > 100 || dice > 100 || times > 100) {
+      message.channel.send('One of your requested values exceeds my limit!');
+      return;
+    }
 
-    // Random roll
-    for (let i = 0; i < num; i++) {
-      result += Math.round(Math.random() * (dice - 1) + 1);
+    // Roll!
+    let result = 0;
+    let rolls = []; // Array of each roll result
+
+    // #times
+    for (let i = 0; i < times; i++) {
+      // (num)d(dice)
+      for (let j = 0; j < num; j++) {
+        let roll = Math.round(Math.random() * (dice - 1) + 1);
+        result += roll;
+        rolls.push(roll);
+      }
     }
 
     // Delete user message
     message.delete();
 
     // Send the rolled result
-    message.channel.send(
-      `${message.author} ${num}d${dice}\`\`\`> ${result}\`\`\``
-    );
+    let rollsText = rolls.length > 1 ? `${rolls.join(', ')}\n` : '',
+      command = `!r ${num}d${dice}x${+times}`,
+      total = `\`\`\`> Total: ${result}\`\`\``;
+
+    rollsText = `${rollsText ? `\`\`\`> Rolls: ${rollsText}\`\`\`` : ''}`;
+
+    message.channel.send(`${message.author} ${command}${total}${rollsText}`);
   }
 };
 
