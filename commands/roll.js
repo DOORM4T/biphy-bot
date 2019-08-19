@@ -21,6 +21,9 @@ const rollDice = message => {
       dice = dice.replace(new RegExp(/\D/g), '');
     }
 
+    if (num > 100) num = 100;
+    if (dice > 100) dice = 100;
+
     // Random roll
     for (let i = 0; i < num; i++) {
       result += Math.round(Math.random() * (dice - 1) + 1);
@@ -31,7 +34,7 @@ const rollDice = message => {
 
     // Send the rolled result
     message.channel.send(
-      `${message.author} ${message.content}\`\`\`> ${result}\`\`\``
+      `${message.author} ${num}d${dice}\`\`\`> ${result}\`\`\``
     );
   }
 };
