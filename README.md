@@ -26,4 +26,4 @@
 > !volume, !v <level>   =>  Modifies current audio volume. Max is 1.5 (150%).
 ```
 
-<img id="biphy" alt="Biphy character and art by fellow Headhunter @Julz Bananz" src="https://cdn.discordapp.com/attachments/588918874272038932/613085069824884899/Biphy.png" style="width:20%;position: absolute;top:0;right:-60px;transform:rotate(-45deg)">
+<img id="biphy" alt="Biphy character and art by fellow Headhunter @Julz Bananz" src="https://cdn.discordapp.com/attachments/588918874272038932/613085069824884899/Biphy.png" width=200 style="width:20%;position: absolute;top:0;right:-60px;transform:rotate(-45deg)">
