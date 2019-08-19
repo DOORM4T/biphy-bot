@@ -8,7 +8,7 @@
 
 3. Invite your bot to your server using the generated link. It should look something like this: https://discordapp.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=3155968&scope=bot.
 
-4. Clone this repository with `git clone http://github.com/DOORM4T/biphy-bot.git`.
+4. Clone this repository with `git clone https://github.com/DOORM4T/biphy-bot.git`.
 
 5. Create a config.json file. Insert JSON in the following format:
 ```JSON
