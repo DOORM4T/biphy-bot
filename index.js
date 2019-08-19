@@ -17,7 +17,7 @@ client.once('ready', () => {
 });
 
 client.once('reconnecting', () => {
-  console.log('reconnecting!');
+  console.log('Reconnecting!');
 });
 
 client.once('disconnect', () => {
