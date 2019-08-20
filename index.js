@@ -11,30 +11,27 @@ let audioPlayer = {
   connection: null,
   currentAudio: null,
   dispatcher: null,
+  status: 'Inactive',
   voiceChannel: null,
   volume: 0.2
 };
 
-client.once('ready', () => {
+client.on('ready', () => {
   console.log('Ready!');
 });
 
-client.once('reconnecting', () => {
-  console.log('Reconnecting!');
-});
-
-client.once('disconnect', () => {
-  console.log('Disconnect!');
-});
-
 client.on('message', async message => {
-  // Stop if the message is from this bot and if the command has no prefix
-  if (message.author.bot || !message.content.startsWith(prefix)) return;
+  // Stop if the message is from this bot
+  if (message.author.bot) return;
+
+  // BaD wOrD fIlTeR
+  // require('./commands/pie.js')(message);
+
+  // If the command has no prefix
+  if (!message.content.startsWith(prefix)) return;
 
   // Determine invoked command
   const args = message.content.split(' ');
-  console.log(args);
-  console.log(args[0]);
   switch (args[0]) {
     // DICE ROLLER
     case `${prefix}r`:
@@ -48,10 +45,32 @@ client.on('message', async message => {
     case `${prefix}play`:
       require('./commands/play.js')(message, audioPlayer, broadcast);
       break;
+    case `${prefix}pl`:
+      require('./commands/play.js')(message, audioPlayer, broadcast);
+      break;
+
+    // PAUSE AUDIO
+    case `${prefix}pause`:
+      require('./commands/pause.js')(message, audioPlayer, broadcast);
+      break;
+    case `${prefix}p`:
+      require('./commands/pause.js')(message, audioPlayer, broadcast);
+      break;
+
+    // RESUME AUDIO
+    case `${prefix}resume`:
+      require('./commands/resume.js')(message, audioPlayer, broadcast);
+      break;
+    case `${prefix}re`:
+      require('./commands/resume.js')(message, audioPlayer, broadcast);
+      break;
 
     // STOP AUDIO
-    case `${prefix}stop`:
-      require('./commands/stop.js')(message, audioPlayer);
+    case `${prefix}leave`:
+      require('./commands/leave.js')(message, audioPlayer, broadcast);
+      break;
+    case `${prefix}l`:
+      require('./commands/leave.js')(message, audioPlayer, broadcast);
       break;
 
     // CHANGE VOLUME
@@ -70,6 +89,9 @@ client.on('message', async message => {
 
     // GET CURRENT AUDIO INFORMATION
     case `${prefix}get`:
+      require('./commands/get.js')(message, audioPlayer);
+      break;
+    case `${prefix}g`:
       require('./commands/get.js')(message, audioPlayer);
       break;
 

@@ -1,3 +1,5 @@
+const { prefix } = require('../config.json');
+
 const help = message => {
   // Delete user message
   message.delete();
@@ -5,16 +7,25 @@ const help = message => {
   // Send help message
   message.channel.send(`${message.author} ${message.content}\`\`\`
   ==============================================
-          BIPHY'S COMMANDS
+          AVAILABLE COMMANDS
   ==============================================
 
-  > !help, !h             =>  Sends the list of available commands.
-  > !r <x>d<y>            =>  Roll a "y" sided die "x" times. 
-  > !r <x>d<y>x<z>        =>  Rolls "z" <x>d<y>'s. 
-  > !afk <reason>         =>  Sends away from keyboard message to channel.
-  > !play <audio_url>     =>  Plays audio your current Voice Channel.
-  > !stop                 =>  Stops current audio.
-  > !volume, !v <level>   =>  Modifies current audio volume. Max is 1.5 (150%).
+  ${prefix}help, ${prefix}h                 =>  Sends the list of available commands.
+
+  DICE ROLLING
+  ${prefix}r <x>d<y>                =>  Roll a "y" sided die "x" times. 
+  ${prefix}r <x>d<y>x<z>            =>  Rolls "z" <x>d<y>'s. 
+
+  AUDIO
+  ${prefix}play <audio_url>         =>  Plays audio your current Voice Channel.
+  ${prefix}pause, ${prefix}p                =>  Pauses current audio.
+  ${prefix}resume, ${prefix}r               =>  Resume current audio.
+  ${prefix}leave, ${prefix}l                =>  Leave current Audio Channel.
+  ${prefix}volume, ${prefix}v <level>       =>  Modifies current audio volume. Max is 1.5 (150%).
+
+  OTHER
+  ${prefix}get, ${prefix}g                  =>  Get audio info. 
+  ${prefix}afk <reason>             =>  Sends away from keyboard message to channel.
   \`\`\``);
 };
 
