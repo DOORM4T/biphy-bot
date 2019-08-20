@@ -52,6 +52,12 @@ client.on('message', async message => {
       message.content.startsWith(`${prefix}h `) ||
       message.content.startsWith(`${prefix}help `)
     ) {
+    } else if (message.content.startsWith(`${prefix}afk`)) {
+      require('./commands/afk.js')(message, audioPlayer);
+    } else if (
+      message.content.startsWith(`${prefix}h `) ||
+      message.content.startsWith(`${prefix}help `)
+    ) {
       require('./commands/help.js')(message);
     } else {
       require('./commands/help.js')(message);
