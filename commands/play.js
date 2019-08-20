@@ -1,8 +1,6 @@
 const ytdl = require('ytdl-core');
-const { prefix } = require('../config.json');
 
 const play = async (message, audioPlayer) => {
-  if (message.content.startsWith(`${prefix}play `)) {
     // !play <url> <?"loop">
     //  [0]   [1]    [2]
     const args = message.content.split(' ');
@@ -82,7 +80,6 @@ const play = async (message, audioPlayer) => {
         });
       audioPlayer.dispatcher.setVolume(audioPlayer.volume);
     }
-  }
 
   /** Resets audioPlayer fields related to the played audio
    * @param info Text logged when audioPlayer is reset

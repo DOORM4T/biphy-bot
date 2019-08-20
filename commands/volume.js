@@ -1,15 +1,9 @@
-const { prefix } = require('../config.json');
-
 /**
  * Sets volume to the level specified
  * @param {*} message User message that was intended to be a command for Biphy.
  * @param {*} audioPlayer Object with properties such as connection and dispatcher.
  */
 const volume = (message, audioPlayer) => {
-  if (
-    message.content.startsWith(`${prefix}volume`) ||
-    message.content.startsWith(`${prefix}v`)
-  ) {
     // !v <level>
     // [0]  [1]
     const args = message.content.split(' ');
@@ -36,7 +30,6 @@ const volume = (message, audioPlayer) => {
       );
       console.log('Couldnt set new volume...');
     }
-  }
 };
 
 module.exports = volume;

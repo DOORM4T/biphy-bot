@@ -24,36 +24,30 @@ client.once('disconnect', () => {
   console.log('Disconnect!');
 });
 
-// Handle user messages
 client.on('message', async message => {
-  // Stop if message is from this bot
-  if (message.author.bot) return;
-
-  // Stop if the command has no prefix
-  if (!message.content.startsWith(prefix)) return;
-
-  // ======================
-  // COMMANDS
-  // ======================
-
-  // Dice Roller (!r <x>d<y>)
-  require('./commands/roll.js')(message);
-
-  // Help (!help, !h)
-  require('./commands/help.js')(message);
-
-  // Play (!play <url>)
-  require('./commands/play.js')(message, audioPlayer);
-
-  // Stop (!stop)
-  require('./commands/stop.js')(message, audioPlayer);
-
-  // Set Volume (!volume <level>, !vol <level>)
-  require('./commands/volume.js')(message, audioPlayer);
-
-  // Player Info Getter (!get <field>)
-  require('./commands/get.js')(message, audioPlayer);
+  // Stop if the message is from this bot and if the command has no prefix
+  if (!message.author.bot && message.content.startsWith(prefix)) {
+    if (message.content.startsWith(`${prefix}r `) || message.content.startsWith(`${prefix}roll `)) {
+      require('./commands/roll.js')(message);
+    }
+    else if (message.content.startsWith(`${prefix}play `)) {
+      require('./commands/play.js')(message, audioPlayer);
+    }
+    else if (message.content.startsWith(`${prefix}stop`)) {
+      require('./commands/stop.js')(message, audioPlayer);
+    }
+    else if (message.content.startsWith(`${prefix}vol `) || message.content.startsWith(`${prefix}volume `)) {
+      require('./commands/volume.js')(message, audioPlayer);
+    }
+    else if (message.content.startsWith(`${prefix}get`)) {
+      require('./commands/get.js')(message, audioPlayer);
+    }
+    else if (message.content.startsWith(`${prefix}h `) || message.content.startsWith(`${prefix}help `)) {
+      require('./commands/help.js')(message);
+    }
+    else {
+      require('./commands/help.js')(message);
+    }
+  }
 });
-
-// Bot Login
 client.login(token);

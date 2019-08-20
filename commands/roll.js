@@ -1,5 +1,3 @@
-const { prefix } = require('../config.json');
-
 /**
  * Command that automagically rolls dice
  *
@@ -9,55 +7,53 @@ const { prefix } = require('../config.json');
  * @param message Message object recieved by the bot when a message is sent
  */
 const rollDice = message => {
-  if (message.content.startsWith(`${prefix}r `)) {
-    let msg = message.content.slice(3);
-    msg.replace(new RegExp(/[\D\s]/g), '');
-    let args = msg.split(/[dx]/); // \s=whitespace, d=#dice, x=#times
+  let msg = message.content.slice(3);
+  msg.replace(new RegExp(/[\D\s]/g), '');
+  let args = msg.split(/[dx]/); // \s=whitespace, d=#dice, x=#times
 
-    // Destructure dice info from args
-    let [num, dice, times] = args;
+  // Destructure dice info from args
+  let [num, dice, times] = args;
 
-    // Convert each value to an integer
-    +num, +dice, +times;
+  // Convert each value to an integer
+  +num, +dice, +times;
 
-    // If no "times"
-    if (!times) {
-      times = 1;
-      console.log('Setting times to 1');
-    }
-
-    // Set limit.
-    if (num > 100 || dice > 100 || times > 100) {
-      message.channel.send('One of your requested values exceeds my limit!');
-      return;
-    }
-
-    // Roll!
-    let result = 0;
-    let rolls = []; // Array of each roll result
-
-    // #times
-    for (let i = 0; i < times; i++) {
-      // (num)d(dice)
-      for (let j = 0; j < num; j++) {
-        let roll = Math.round(Math.random() * (dice - 1) + 1);
-        result += roll;
-        rolls.push(roll);
-      }
-    }
-
-    // Delete user message
-    message.delete();
-
-    // Send the rolled result
-    let rollsText = rolls.length > 1 ? `${rolls.join(', ')}\n` : '',
-      command = `!r ${num}d${dice}x${+times}`,
-      total = `\`\`\`> Total: ${result}\`\`\``;
-
-    rollsText = `${rollsText ? `\`\`\`> Rolls: ${rollsText}\`\`\`` : ''}`;
-
-    message.channel.send(`${message.author} ${command}${total}${rollsText}`);
+  // If no "times"
+  if (!times) {
+    times = 1;
+    console.log('Setting times to 1');
   }
+
+  // Set limit.
+  if (num > 100 || dice > 100 || times > 100) {
+    message.channel.send('One of your requested values exceeds my limit!');
+    return;
+  }
+
+  // Roll!
+  let result = 0;
+  let rolls = []; // Array of each roll result
+
+  // #times
+  for (let i = 0; i < times; i++) {
+    // (num)d(dice)
+    for (let j = 0; j < num; j++) {
+      let roll = Math.round(Math.random() * (dice - 1) + 1);
+      result += roll;
+      rolls.push(roll);
+    }
+  }
+
+  // Delete user message
+  message.delete();
+
+  // Send the rolled result
+  let rollsText = rolls.length > 1 ? `${rolls.join(', ')}\n` : '',
+    command = `!r ${num}d${dice}x${+times}`,
+    total = `\`\`\`> Total: ${result}\`\`\``;
+
+  rollsText = `${rollsText ? `\`\`\`> Rolls: ${rollsText}\`\`\`` : ''}`;
+
+  message.channel.send(`${message.author} ${command}${total}${rollsText}`);
 };
 
 module.exports = rollDice;
