@@ -2,6 +2,15 @@ const ytdl = require('ytdl-core');
 
 // Stream audio from YouTube using YTDL
 const play = async (message, audioPlayer, broadcast) => {
+  // Stop invoker isn't a voice Channel
+  if (!message.member.voiceChannel) {
+    message.delete();
+    message.channel.send(
+      `${message.author} You need to be in a Voice Channel to play audio!`
+    );
+    return;
+  }
+
   const args = message.content.split(' ');
   // !play <url> <loop>
   //  [0]   [1]    [2]
@@ -49,6 +58,7 @@ const play = async (message, audioPlayer, broadcast) => {
       audioPlayer.connection = connection;
       audioPlayer.dispatcher = dispatcher;
       audioPlayer.voiceChannel = message.member.voiceChannel;
+      console.log(audioPlayer.voiceChannel);
       audioPlayer.currentAudio = title;
       audioPlayer.audioUrl = video_url;
       audioPlayer.status = 'Active';

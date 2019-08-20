@@ -17,7 +17,9 @@ let audioPlayer = {
   looping: false,
   status: 'Inactive',
   voiceChannel: null,
-  volume: 0.2
+  volume: 0.2,
+  effectQueue: [],
+  musicQueue: []
 };
 
 client.on('ready', () => {
