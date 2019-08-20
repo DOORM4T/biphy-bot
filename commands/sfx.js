@@ -2,22 +2,36 @@ const fs = require('fs');
 const path = require('path');
 
 // TODO: Add sounds to Dice Rolls
-
-const playSound = (message, audioPlayer) => {
-  console.log(audioPlayer);
+const playSound = (message, audioPlayer, broadcast) => {
   if (audioPlayer.voiceChannel) {
-    // Convert local audio to read stream
+    audioPlayer.voiceChannel
+      .join()
+      .then(connection => {
+        play(connection);
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  } else {
+    message.member.voiceChannel
+      .join()
+      .then(connection => {
+        play(connection);
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  }
 
-    const stream = fs.createReadStream(
-      path.join(__dirname, '../audio/multiple/Multi_3.mp3')
-    );
-    console.log(stream);
+  async function play(connection) {
+    await broadcast.end();
 
-    stream.on('error', err => {
-      console.log(err.message);
-    });
-
-    audioPlayer.connection.playStream(stream);
+    // Play Audio
+    let num = 2;
+    console.log(num);
+    const audio = path.resolve(__dirname, `../audio/multiple/Multi_${num}.mp3`);
+    await broadcast.playStream(fs.createReadStream(audio));
+    const dispatcher = await connection.playBroadcast(broadcast);
   }
 };
 

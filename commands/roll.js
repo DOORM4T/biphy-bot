@@ -7,7 +7,7 @@
  * @param message Message object recieved by the bot when a message is sent
  */
 const { prefix } = require('../config.json');
-const rollDice = (message, audioPlayer) => {
+const rollDice = (message, audioPlayer, broadcast) => {
   let msg = message.content.slice(3);
   msg.replace(new RegExp(/[\D\s]/g), '');
   let args = msg.split(/[dx]/); // \s=whitespace, d=#dice, x=#times
@@ -46,15 +46,15 @@ const rollDice = (message, audioPlayer) => {
   // Delete user message
   message.delete();
 
+  // Play roll sound
+  if (result > 0) require('./sfx.js')(message, audioPlayer, broadcast);
+
   // Send the rolled result
   let rollsText = rolls.length > 1 ? `${rolls.join(', ')}\n` : '',
     command = `${prefix}r ${num}d${dice}x${+times}`,
     total = `\`\`\`> Total: ${result}\`\`\``;
 
   rollsText = `${rollsText ? `\`\`\`> Rolls: ${rollsText}\`\`\`` : ''}`;
-
-  // Play roll sound
-  // require('./sfx.js')(message, audioPlayer);
 
   // Message
   message.channel.send(`${message.author} ${command}${total}${rollsText}`);

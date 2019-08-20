@@ -4,6 +4,9 @@ const path = require('path');
 
 const client = new Discord.Client();
 const broadcast = client.createVoiceBroadcast();
+broadcast.on('error', () => {
+  broadcast.end;
+});
 
 let audioPlayer = {
   audioUrl: null,
@@ -36,10 +39,10 @@ client.on('message', async message => {
   switch (args[0]) {
     // DICE ROLLER
     case `${prefix}r`:
-      require('./commands/roll.js')(message, audioPlayer);
+      require('./commands/roll.js')(message, audioPlayer, broadcast);
       break;
     case `${prefix}roll`:
-      require('./commands/roll.js')(message, audioPlayer);
+      require('./commands/roll.js')(message, audioPlayer, broadcast);
       break;
 
     // PLAY AUDIO
@@ -94,6 +97,11 @@ client.on('message', async message => {
     case `${prefix}leave`:
       message.delete();
       if (audioPlayer.voiceChannel) audioPlayer.voiceChannel.leave();
+      break;
+
+    // PLAY SOUND EFFECT
+    case `${prefix}playSound`:
+      require('./commands/sfx.js')(message, audioPlayer, broadcast);
       break;
 
     // GET CURRENT AUDIO INFORMATION
