@@ -4,8 +4,9 @@ const path = require('path');
 
 const client = new Discord.Client();
 const broadcast = client.createVoiceBroadcast();
-broadcast.on('error', () => {
-  broadcast.end;
+broadcast.on('error', err => {
+  console.log(err.message);
+  broadcast.end();
 });
 
 let audioPlayer = {
@@ -71,7 +72,16 @@ client.on('message', async message => {
       require('./commands/resume.js')(message, audioPlayer, broadcast);
       break;
 
-    // STOP AUDIO
+    // STOP PLAYING
+    case `${prefix}stop`:
+      require('./commands/stop.js')(message, audioPlayer, broadcast);
+      break;
+
+    case `${prefix}s`:
+      require('./commands/stop.js')(message, audioPlayer, broadcast);
+      break;
+
+    // STOP & LEAVE VOICE CHANNEL
     case `${prefix}leave`:
       require('./commands/leave.js')(message, audioPlayer, broadcast);
       break;

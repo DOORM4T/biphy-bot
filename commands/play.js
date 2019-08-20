@@ -4,11 +4,10 @@ const ytdl = require('ytdl-core');
 const play = async (message, audioPlayer, broadcast) => {
   // Stop invoker isn't a voice Channel
   if (!message.member.voiceChannel) {
-    message.delete();
-    message.channel.send(
+    await message.delete();
+    return await message.channel.send(
       `${message.author} You need to be in a Voice Channel to play audio!`
     );
-    return;
   }
 
   const args = message.content.split(' ');
@@ -27,12 +26,16 @@ const play = async (message, audioPlayer, broadcast) => {
   });
 
   // Clear broadcast to make room for a new one
-  await broadcast.end();
+  // await broadcast.end();
 
   // Join Voice Channel of user who invoked the command
-  message.member.voiceChannel
+  await message.member.voiceChannel
     .join()
     .then(async connection => {
+      if (!audioPlayer.voiceChannel)
+        audioPlayer.voiceChannel = message.member.voiceChannel;
+      if (!args[1]) return;
+
       // Get Youtube Video Info
       const info = await ytdl.getInfo(args[1]);
       const { title, video_url } = info;
@@ -43,22 +46,24 @@ const play = async (message, audioPlayer, broadcast) => {
       });
 
       // Clear & Send Message
-      if (message.delete) {
-        message.delete();
-        message.channel.send(
-          `${message.author}\`\`\`Now Playing: ${title}\n${video_url}\`\`\``
-        );
+      try {
+        if (!!message.delete) {
+          await message.delete();
+          await message.channel.send(
+            `${message.author}\`\`\`Now Playing: ${title}\n${video_url}\`\`\``
+          );
+        }
+      } catch (err) {
+        console.log(err.message);
       }
 
       // Play Audio
-      broadcast.playStream(stream);
-      const dispatcher = connection.playBroadcast(broadcast);
+      await broadcast.playStream(stream);
+      const dispatcher = await connection.playBroadcast(broadcast);
 
       // Set audioPlayer Information
       audioPlayer.connection = connection;
       audioPlayer.dispatcher = dispatcher;
-      audioPlayer.voiceChannel = message.member.voiceChannel;
-      console.log(audioPlayer.voiceChannel);
       audioPlayer.currentAudio = title;
       audioPlayer.audioUrl = video_url;
       audioPlayer.status = 'Active';

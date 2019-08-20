@@ -1,17 +1,19 @@
-const pause = (message, audioPlayer, broadcast) => {
+const pause = async (message, audioPlayer, broadcast) => {
   if (!audioPlayer.currentAudio)
-    return message.channel.send(
+    return await message.channel.send(
       '```CANT PAUSE: No Audio Currently Playing.```'
     );
 
-  message.delete();
+  await message.delete();
   try {
-    broadcast.pause();
-    message.channel.send(`\`\`\`Paused ${audioPlayer.currentAudio}\`\`\``);
+    await broadcast.pause();
+    await message.channel.send(
+      `\`\`\`Paused ${audioPlayer.currentAudio}\`\`\``
+    );
     audioPlayer.status = 'Paused';
   } catch (err) {
     console.log(err);
-    message.channel.send(
+    await message.channel.send(
       `\`\`\`Ran into an issue while trying to pause...\`\`\``
     );
   }

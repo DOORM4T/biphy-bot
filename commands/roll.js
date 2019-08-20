@@ -88,10 +88,10 @@ const rollDice = (message, audioPlayer, broadcast) => {
       mod ? `(${result - mod}${mod > 0 ? `+${mod}` : mod})` : ''
     }\`\`\``
   );
-  message.channel.send(`||${rollsText}||`);
+  if (rollsText) message.channel.send(`||${rollsText}||`);
 
   // Play roll sound
-  require('./sfx.js')(message, audioPlayer, broadcast);
+  // require('./sfx.js')(message, audioPlayer, broadcast);
 };
 
 module.exports = rollDice;

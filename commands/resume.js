@@ -1,17 +1,19 @@
-const resume = (message, audioPlayer, broadcast) => {
+const resume = async (message, audioPlayer, broadcast) => {
   if (!audioPlayer.currentAudio)
-    return message.channel.send(
+    return await message.channel.send(
       '```CANT RESUME: No Audio Currently Playing.```'
     );
 
-  message.delete();
+  await message.delete();
   try {
-    broadcast.resume();
-    message.channel.send(`\`\`\`Resuming ${audioPlayer.currentAudio}\`\`\``);
+    await broadcast.resume();
+    await message.channel.send(
+      `\`\`\`Resuming ${audioPlayer.currentAudio}\`\`\``
+    );
     audioPlayer.status = 'Active';
   } catch (err) {
     console.log(err);
-    message.channel.send(
+    await message.channel.send(
       `\`\`\`Ran into an issue while trying to resume...\`\`\``
     );
   }
