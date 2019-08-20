@@ -28,9 +28,8 @@ const playSound = (message, audioPlayer, broadcast) => {
 
     // Play Audio
     let num = 2;
-    console.log(num);
     const audio = path.resolve(__dirname, `../audio/multiple/Multi_${num}.mp3`);
-    await broadcast.playStream(fs.createReadStream(audio));
+    await broadcast.playFile(audio);
     const dispatcher = await connection.playBroadcast(broadcast);
   }
 };
