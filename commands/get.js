@@ -9,7 +9,9 @@ const get = (message, audioPlayer) => {
         audioPlayer.currentAudio ? audioPlayer.currentAudio : 'N/A'
       }\nURL: ${
         audioPlayer.audioUrl ? audioPlayer.audioUrl : 'N/A'
-      }\nVOLUME:${audioPlayer.volume * 100}%\n\`\`\``
+      }\nVOLUME: ${audioPlayer.volume * 100}%\nLOOPING: ${
+        audioPlayer.looping
+      }\n\`\`\``
     );
   } catch (err) {
     console.log(`Couldn't get audio info...`);

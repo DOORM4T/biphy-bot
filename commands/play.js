@@ -6,6 +6,17 @@ const play = async (message, audioPlayer, broadcast) => {
   // !play <url> <loop>
   //  [0]   [1]    [2]
 
+  // Looping?
+  if (args[2]) audioPlayer.looping = true;
+  const msg = { ...message }; // Copy message object for recursive play calls
+  broadcast.on('end', () => {
+    console.log('Loop: ' + audioPlayer.looping);
+    // If Looping
+    if (audioPlayer.looping) {
+      play(msg, audioPlayer, broadcast);
+    }
+  });
+
   // Clear broadcast to make room for a new one
   await broadcast.end();
 
@@ -23,7 +34,7 @@ const play = async (message, audioPlayer, broadcast) => {
       });
 
       // Clear & Send Message
-      message.delete();
+      if (message.delete) message.delete();
       message.channel.send(
         `${message.author}\`\`\`Now Playing: ${title}\n${video_url}\`\`\``
       );
@@ -31,14 +42,6 @@ const play = async (message, audioPlayer, broadcast) => {
       // Play Audio
       broadcast.playStream(stream);
       const dispatcher = connection.playBroadcast(broadcast);
-
-      broadcast.on('end', () => {
-        console.log('Loop: ' + args[2]);
-        // If Looping
-        if (args[2]) {
-          play(message, audioPlayer, broadcast);
-        }
-      });
 
       // Set audioPlayer Information
       audioPlayer.connection = connection;

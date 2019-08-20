@@ -11,6 +11,7 @@ let audioPlayer = {
   connection: null,
   currentAudio: null,
   dispatcher: null,
+  looping: false,
   status: 'Inactive',
   voiceChannel: null,
   volume: 0.2
@@ -25,7 +26,7 @@ client.on('message', async message => {
   if (message.author.bot) return;
 
   // BaD wOrD fIlTeR
-  // require('./commands/pie.js')(message);
+  require('./commands/pie.js')(message);
 
   // If the command has no prefix
   if (!message.content.startsWith(prefix)) return;
@@ -71,6 +72,14 @@ client.on('message', async message => {
       break;
     case `${prefix}l`:
       require('./commands/leave.js')(message, audioPlayer, broadcast);
+      break;
+
+    // TOGGLE AUDIO LOOPING
+    case `${prefix}loop`:
+      if (audioPlayer.looping) audioPlayer.looping = false;
+      else audioPlayer.looping = true;
+      message.delete();
+      message.channel.send(`\`\`\`Looping: ${audioPlayer.looping}\`\`\``);
       break;
 
     // CHANGE VOLUME
