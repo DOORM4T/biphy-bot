@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+// TODO: Add sounds to Dice Rolls
+
 const playSound = (message, audioPlayer) => {
   console.log(audioPlayer);
   if (audioPlayer.voiceChannel) {

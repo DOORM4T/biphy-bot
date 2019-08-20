@@ -6,12 +6,13 @@ const client = new Discord.Client();
 const broadcast = client.createVoiceBroadcast();
 
 let audioPlayer = {
+  audioUrl: null,
+  broadcast,
   connection: null,
-  voiceChannel: null,
-  volume: 0.2,
-  dispatcher: null,
   currentAudio: null,
-  audioUrl: null
+  dispatcher: null,
+  voiceChannel: null,
+  volume: 0.2
 };
 
 client.once('ready', () => {
@@ -28,40 +29,65 @@ client.once('disconnect', () => {
 
 client.on('message', async message => {
   // Stop if the message is from this bot and if the command has no prefix
-  if (!message.author.bot && message.content.startsWith(prefix)) {
-    if (
-      message.content.startsWith(`${prefix}r `) ||
-      message.content.startsWith(`${prefix}roll `)
-    ) {
+  if (message.author.bot || !message.content.startsWith(prefix)) return;
+
+  // Determine invoked command
+  const args = message.content.split(' ');
+  console.log(args);
+  console.log(args[0]);
+  switch (args[0]) {
+    // DICE ROLLER
+    case `${prefix}r`:
       require('./commands/roll.js')(message, audioPlayer);
-    } else if (message.content.startsWith(`${prefix}play `)) {
+      break;
+    case `${prefix}roll`:
+      require('./commands/roll.js')(message, audioPlayer);
+      break;
+
+    // PLAY AUDIO
+    case `${prefix}play`:
       require('./commands/play.js')(message, audioPlayer, broadcast);
-    } else if (message.content.startsWith(`${prefix}stop`)) {
+      break;
+
+    // STOP AUDIO
+    case `${prefix}stop`:
       require('./commands/stop.js')(message, audioPlayer);
-    } else if (
-      message.content.startsWith(`${prefix}v `) ||
-      message.content.startsWith(`${prefix}volume `)
-    ) {
+      break;
+
+    // CHANGE VOLUME
+    case `${prefix}volume`:
       require('./commands/volume.js')(message, audioPlayer);
-    } else if (message.content.startsWith(`${prefix}leave`)) {
+      break;
+    case `${prefix}v`:
+      require('./commands/volume.js')(message, audioPlayer);
+      break;
+
+    // LEAVE VOICE CHANNEL
+    case `${prefix}leave`:
       message.delete();
       if (audioPlayer.voiceChannel) audioPlayer.voiceChannel.leave();
-    } else if (message.content.startsWith(`${prefix}get`)) {
+      break;
+
+    // GET CURRENT AUDIO INFORMATION
+    case `${prefix}get`:
       require('./commands/get.js')(message, audioPlayer);
-    } else if (
-      message.content.startsWith(`${prefix}h `) ||
-      message.content.startsWith(`${prefix}help `)
-    ) {
-    } else if (message.content.startsWith(`${prefix}afk`)) {
+      break;
+
+    // GO AFK
+    case `${prefix}afk`:
       require('./commands/afk.js')(message, audioPlayer);
-    } else if (
-      message.content.startsWith(`${prefix}h `) ||
-      message.content.startsWith(`${prefix}help `)
-    ) {
+      break;
+
+    // HELP
+    case `${prefix}help`:
       require('./commands/help.js')(message);
-    } else {
+      break;
+    case `${prefix}h`:
       require('./commands/help.js')(message);
-    }
+      break;
+    default:
+      require('./commands/help.js')(message);
   }
 });
+
 client.login(token);
