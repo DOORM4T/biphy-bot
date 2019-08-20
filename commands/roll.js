@@ -6,7 +6,8 @@
  * EX: 1d20 -- Roll the 20 sided die 1 time.
  * @param message Message object recieved by the bot when a message is sent
  */
-const rollDice = message => {
+const { prefix } = require('../config.json');
+const rollDice = (message, audioPlayer) => {
   let msg = message.content.slice(3);
   msg.replace(new RegExp(/[\D\s]/g), '');
   let args = msg.split(/[dx]/); // \s=whitespace, d=#dice, x=#times
@@ -20,7 +21,6 @@ const rollDice = message => {
   // If no "times"
   if (!times) {
     times = 1;
-    console.log('Setting times to 1');
   }
 
   // Set limit.
@@ -48,11 +48,15 @@ const rollDice = message => {
 
   // Send the rolled result
   let rollsText = rolls.length > 1 ? `${rolls.join(', ')}\n` : '',
-    command = `!r ${num}d${dice}x${+times}`,
+    command = `${prefix}r ${num}d${dice}x${+times}`,
     total = `\`\`\`> Total: ${result}\`\`\``;
 
   rollsText = `${rollsText ? `\`\`\`> Rolls: ${rollsText}\`\`\`` : ''}`;
 
+  // Play roll sound
+  // require('./sfx.js')(message, audioPlayer);
+
+  // Message
   message.channel.send(`${message.author} ${command}${total}${rollsText}`);
 };
 

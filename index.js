@@ -1,7 +1,9 @@
 const Discord = require('discord.js');
 const { prefix, token } = require('./config.json');
+const path = require('path');
 
 const client = new Discord.Client();
+const broadcast = client.createVoiceBroadcast();
 
 let audioPlayer = {
   connection: null,
@@ -27,25 +29,31 @@ client.once('disconnect', () => {
 client.on('message', async message => {
   // Stop if the message is from this bot and if the command has no prefix
   if (!message.author.bot && message.content.startsWith(prefix)) {
-    if (message.content.startsWith(`${prefix}r `) || message.content.startsWith(`${prefix}roll `)) {
-      require('./commands/roll.js')(message);
-    }
-    else if (message.content.startsWith(`${prefix}play `)) {
-      require('./commands/play.js')(message, audioPlayer);
-    }
-    else if (message.content.startsWith(`${prefix}stop`)) {
+    if (
+      message.content.startsWith(`${prefix}r `) ||
+      message.content.startsWith(`${prefix}roll `)
+    ) {
+      require('./commands/roll.js')(message, audioPlayer);
+    } else if (message.content.startsWith(`${prefix}play `)) {
+      require('./commands/play.js')(message, audioPlayer, broadcast);
+    } else if (message.content.startsWith(`${prefix}stop`)) {
       require('./commands/stop.js')(message, audioPlayer);
-    }
-    else if (message.content.startsWith(`${prefix}vol `) || message.content.startsWith(`${prefix}volume `)) {
+    } else if (
+      message.content.startsWith(`${prefix}v `) ||
+      message.content.startsWith(`${prefix}volume `)
+    ) {
       require('./commands/volume.js')(message, audioPlayer);
-    }
-    else if (message.content.startsWith(`${prefix}get`)) {
+    } else if (message.content.startsWith(`${prefix}leave`)) {
+      message.delete();
+      if (audioPlayer.voiceChannel) audioPlayer.voiceChannel.leave();
+    } else if (message.content.startsWith(`${prefix}get`)) {
       require('./commands/get.js')(message, audioPlayer);
-    }
-    else if (message.content.startsWith(`${prefix}h `) || message.content.startsWith(`${prefix}help `)) {
+    } else if (
+      message.content.startsWith(`${prefix}h `) ||
+      message.content.startsWith(`${prefix}help `)
+    ) {
       require('./commands/help.js')(message);
-    }
-    else {
+    } else {
       require('./commands/help.js')(message);
     }
   }
