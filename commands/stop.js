@@ -1,14 +1,16 @@
 const stop = async (message, audioPlayer, broadcast) => {
   try {
-    if (!!message.delete) await message.delete();
+    await message.delete();
+    if (message.delete && audioPlayer.currentAudio) {
+      await message.channel.send(
+        `${message.author}\`\`\`Stopped Playing: ${
+          audioPlayer.currentAudio
+        }\`\`\``
+      );
+    }
   } catch (err) {
     console.log(err.message);
   } finally {
-    await message.channel.send(
-      `${message.author}\`\`\`Stopped Playing: ${
-        audioPlayer.currentAudio
-      }\`\`\``
-    );
     audioPlayer.status = 'Inactive';
     audioPlayer.currentAudio = null;
     audioPlayer.audioUrl = null;

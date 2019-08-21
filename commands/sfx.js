@@ -1,8 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-// TODO: Add sounds to Dice Rolls
 const playSound = async (message, audioPlayer, broadcast) => {
+  // Assign array of local sounds to audioPlayer localSounds property
+  if (audioPlayer.localSounds.length === 0)
+    audioPlayer.localSounds = getSounds('dice');
+
   // Stop if invoker isn't in a voice Channel
   if (!message.member.voiceChannel) {
     try {
@@ -17,26 +20,25 @@ const playSound = async (message, audioPlayer, broadcast) => {
   }
 
   // Play audio in invoker's Voice Channel.
-  await broadcast.end();
   await message.member.voiceChannel
     .join()
     .then(connection => {
-      // console.log(audioPlayer);
+      broadcast.end();
       if (!audioPlayer.voiceChannel)
         audioPlayer.voiceChannel = message.member.voiceChannel;
+
       // Play Audio
-      let num = 2;
+      const randomIndex = Math.floor(
+        Math.random() * audioPlayer.localSounds.length
+      );
+      console.log(randomIndex);
       const audio = path.resolve(
         __dirname,
-        `../audio/multiple/Multi_${num}.mp3`
+        `../audio/${audioPlayer.localSounds[randomIndex]}`
       );
       broadcast.playFile(audio);
       const dispatcher = connection.playBroadcast(broadcast);
       audioPlayer.dispatcher = dispatcher;
-      // Play next sounds in queue
-      // broadcast.on('end', () => {
-      //   console.log('ended');
-      // });
     })
     .catch(err => {
       console.log(err.message);
@@ -44,3 +46,20 @@ const playSound = async (message, audioPlayer, broadcast) => {
 };
 
 module.exports = playSound;
+
+function getSounds(base) {
+  let defaultSounds = [];
+  fs.readdirSync(path.resolve(__dirname, `../audio/${base}`)).forEach(
+    folder => {
+      defaultSounds = [
+        ...defaultSounds,
+        ...fs
+          .readdirSync(path.resolve(__dirname, `../audio/${base}/${folder}`))
+          .map(file => `${base}/${folder}/${file}`)
+      ];
+    }
+  );
+
+  console.log(defaultSounds);
+  return defaultSounds;
+}

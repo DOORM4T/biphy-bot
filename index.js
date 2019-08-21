@@ -11,7 +11,6 @@ broadcast.on('error', err => {
 
 let audioPlayer = {
   audioUrl: null,
-  broadcast,
   connection: null,
   currentAudio: null,
   dispatcher: null,
@@ -19,8 +18,7 @@ let audioPlayer = {
   status: 'Inactive',
   voiceChannel: null,
   volume: 0.2,
-  effectQueue: [],
-  musicQueue: []
+  localSounds: []
 };
 
 client.on('ready', () => {

@@ -52,7 +52,7 @@ const rollDice = async (message, audioPlayer, broadcast) => {
       currentText = '';
     // (num)d(dice)
     for (let j = 0; j < num; j++) {
-      let roll = Math.round(Math.random() * (dice - 1) + 1);
+      let roll = Math.floor(Math.random() * dice + 1);
       currentText += roll;
       if (j !== num - 1) currentText += ' + ';
       currentTotal += roll;
