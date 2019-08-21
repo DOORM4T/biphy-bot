@@ -5,17 +5,23 @@ const path = require('path');
 const playSound = async (message, audioPlayer, broadcast) => {
   // Stop if invoker isn't in a voice Channel
   if (!message.member.voiceChannel) {
-    await message.delete();
-    return await message.channel.send(
-      `${message.author} You need to be in a Voice Channel to play audio!`
-    );
+    try {
+      if (!!message.delete) await message.delete();
+    } catch (err) {
+      console.log(err.message);
+    } finally {
+      return await message.channel.send(
+        `${message.author} You need to be in a Voice Channel to play audio!`
+      );
+    }
   }
 
   // Play audio in invoker's Voice Channel.
+  await broadcast.end();
   await message.member.voiceChannel
     .join()
     .then(connection => {
-      console.log(audioPlayer);
+      // console.log(audioPlayer);
       if (!audioPlayer.voiceChannel)
         audioPlayer.voiceChannel = message.member.voiceChannel;
       // Play Audio

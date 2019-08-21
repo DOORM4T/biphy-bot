@@ -9,7 +9,7 @@
  * @param message Message object recieved by the bot when a message is sent
  */
 
-const rollDice = (message, audioPlayer, broadcast) => {
+const rollDice = async (message, audioPlayer, broadcast) => {
   // Stop if no dice to roll
   if (!message.content.includes('d')) return;
 
@@ -67,7 +67,7 @@ const rollDice = (message, audioPlayer, broadcast) => {
   });
 
   // Delete user message
-  message.delete();
+  await message.delete();
 
   // Message
   let rollsText =
@@ -83,15 +83,15 @@ const rollDice = (message, audioPlayer, broadcast) => {
     mod ? (mod > 0 ? `+${mod}` : mod) : ''
   }`;
 
-  message.channel.send(
+  await message.channel.send(
     `${message.author} ${commandText}\`\`\`RESULT: ${result} ${
       mod ? `(${result - mod}${mod > 0 ? `+${mod}` : mod})` : ''
     }\`\`\``
   );
-  if (rollsText) message.channel.send(`||${rollsText}||`);
+  if (rollsText) await message.channel.send(`||${rollsText}||`);
 
   // Play roll sound
-  // require('./sfx.js')(message, audioPlayer, broadcast);
+  await require('./sfx.js')(message, audioPlayer, broadcast);
 };
 
 module.exports = rollDice;

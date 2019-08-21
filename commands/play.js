@@ -45,7 +45,7 @@ const play = async (message, audioPlayer, broadcast) => {
         filter: 'audioonly'
       });
 
-      // Clear & Send Message
+      // Clear & Send Message. Try catch message.delete because it might not persist through recursion
       try {
         if (!!message.delete) {
           await message.delete();
