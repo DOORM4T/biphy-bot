@@ -91,7 +91,8 @@ const rollDice = async (message, audioPlayer, broadcast) => {
   if (rollsText) await message.channel.send(`||${rollsText}||`);
 
   // Play roll sound
-  await require('./sfx.js')(message, audioPlayer, broadcast);
+  if (message.member.voiceChannel)
+    await require('./sfx.js')(message, audioPlayer, broadcast);
 };
 
 module.exports = rollDice;
