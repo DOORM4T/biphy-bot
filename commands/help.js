@@ -18,6 +18,7 @@ const help = message => {
 
   AUDIO
   ${prefix}play <audio_url> <?loop> =>  Play audio in current Voice Channel. End with 'loop' to loop
+  ${prefix}playSound, ps <sound>    =>  Play audio in current Voice Channel. End with 'loop' to loop
   ${prefix}pause, ${prefix}p                =>  Pauses current audio.
   ${prefix}resume, ${prefix}r               =>  Resume current audio.
   ${prefix}stop, ${prefix}s                 =>  Stop current audio without leaving the Voice Channel

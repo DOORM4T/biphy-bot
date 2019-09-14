@@ -2,6 +2,8 @@ const ytdl = require('ytdl-core');
 
 // Stream audio from YouTube using YTDL
 const play = async (message, audioPlayer, broadcast) => {
+  await broadcast.end();
+
   // Stop invoker isn't a voice Channel
   if (!message.member.voiceChannel) {
     await message.delete();
@@ -37,9 +39,14 @@ const play = async (message, audioPlayer, broadcast) => {
       if (!args[1]) return;
 
       // Get Youtube Video Info
-      const info = await ytdl.getInfo(args[1]);
-      const { title, video_url } = info;
 
+      let info;
+      try {
+        info = await ytdl.getInfo(args[1]);
+      } catch (err) {
+        return console.log("Audio doesn't exist.");
+      }
+      const { title, video_url } = info;
       // Convert Video to Stream
       const stream = await ytdl(video_url, {
         filter: 'audioonly'
@@ -50,7 +57,9 @@ const play = async (message, audioPlayer, broadcast) => {
         if (!!message.delete) {
           await message.delete();
           await message.channel.send(
-            `${message.author}\`\`\`Now Playing: ${title}\n${video_url}\`\`\``
+            `${message.author}\`\`\`Now Playing: ${title}\n${video_url}${
+              audioPlayer.looping ? '\nLOOPING' : ''
+            }\`\`\``
           );
         }
       } catch (err) {
@@ -59,7 +68,7 @@ const play = async (message, audioPlayer, broadcast) => {
 
       // Play Audio
       await broadcast.playStream(stream);
-      const dispatcher = await connection.playBroadcast(broadcast);
+      dispatcher = await connection.playBroadcast(broadcast);
 
       // Set audioPlayer Information
       audioPlayer.connection = connection;

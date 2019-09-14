@@ -9,6 +9,13 @@ broadcast.on('error', err => {
   broadcast.end();
 });
 
+broadcast.on('end', () => {
+  audioPlayer.dispatcher.pause();
+  audioPlayer.dispatcher.end();
+  audioPlayer.looping = false;
+  console.log('Done');
+});
+
 let audioPlayer = {
   audioUrl: null,
   connection: null,
@@ -17,8 +24,9 @@ let audioPlayer = {
   looping: false,
   status: 'Inactive',
   voiceChannel: null,
-  volume: 0.2,
-  localSounds: []
+  volume: 0.1,
+  currentSoundEffect: 'dice',
+  currentSounds: []
 };
 
 client.on('ready', () => {
@@ -111,6 +119,9 @@ client.on('message', async message => {
 
     // PLAY SOUND EFFECT
     case `${prefix}playSound`:
+      require('./commands/sfx.js')(message, audioPlayer, broadcast);
+      break;
+    case `${prefix}ps`:
       require('./commands/sfx.js')(message, audioPlayer, broadcast);
       break;
 
