@@ -69,6 +69,7 @@ const play = async (message, audioPlayer, broadcast) => {
       // Play Audio
       await broadcast.playStream(stream);
       dispatcher = await connection.playBroadcast(broadcast);
+      await dispatcher.setVolume(0.1);
 
       // Set audioPlayer Information
       audioPlayer.connection = connection;
