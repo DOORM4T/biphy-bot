@@ -12,7 +12,6 @@ broadcast.on('error', err => {
 broadcast.on('end', () => {
   audioPlayer.dispatcher.pause();
   audioPlayer.dispatcher.end();
-  audioPlayer.looping = false;
   console.log('Done');
 });
 
