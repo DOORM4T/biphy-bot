@@ -13,8 +13,11 @@ const playSound = async (message, audioPlayer, broadcast) => {
 
   let sound;
   if (message.content.startsWith(`${prefix}r `)) sound = 'dice';
-  else sound = message.content.split(' ')[1];
-  console.log(sound);
+  else {
+    await message.delete();
+    sound = message.content.split(' ')[1];
+  }
+  // console.log(sound);
   // Assign array of local sounds to audioPlayer currentSounds property
   if (audioPlayer.currentSoundEffect !== sound) {
     audioPlayer.currentSoundEffect = sound;
@@ -37,8 +40,8 @@ const playSound = async (message, audioPlayer, broadcast) => {
   // Play audio in invoker's Voice Channel.
   await message.member.voiceChannel
     .join()
-    .then(connection => {
-      broadcast.end();
+    .then(async connection => {
+      await broadcast.end();
       if (!audioPlayer.voiceChannel)
         audioPlayer.voiceChannel = message.member.voiceChannel;
 
@@ -49,9 +52,9 @@ const playSound = async (message, audioPlayer, broadcast) => {
       // console.log(randomIndex);
       const audio = audioPlayer.currentSounds[randomIndex];
 
-      console.log(audio);
-      broadcast.playFile(audio);
-      const dispatcher = connection.playBroadcast(broadcast);
+      // console.log(audio);
+      await broadcast.playFile(audio);
+      const dispatcher = await connection.playBroadcast(broadcast);
       audioPlayer.dispatcher = dispatcher;
     })
     .catch(err => {
