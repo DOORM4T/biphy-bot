@@ -31,7 +31,7 @@
 > !stop                 =>  Stops current audio.
 > !volume, !v <level>   =>  Modifies current audio volume. Max is 1.5 (150%).
 ```
-Note: To run audio commands, you will need (https://ffmpeg.zeranoe.com/builds/)[ffmpeg] installed on your machine. 
+Note: To run audio commands, you will need [ffmpeg](https://ffmpeg.zeranoe.com/builds/) installed on your machine. 
 
 
 <img id="biphy" alt="Biphy character and art by fellow Headhunter @Julz Bananz" src="https://cdn.discordapp.com/attachments/588918874272038932/613085069824884899/Biphy.png" width=200 style="width:20%;position: absolute;top:0;right:-60px;transform:rotate(-45deg)">
