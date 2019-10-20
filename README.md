@@ -24,12 +24,25 @@
 ## Commands
 
 ```
-> !help, !h             =>  Sends the list of available commands.
-> !r <x>d<y>            =>  Roll a "y" sided die "x" times.
-> !r <x>d<y>x<z>        =>  Rolls "z" <x>d<y>'s.
-> !play <audio_url>     =>  Plays audio your current Voice Channel.
-> !stop                 =>  Stops current audio.
-> !volume, !v <level>   =>  Modifies current audio volume. Max is 1.5 (150%).
+  !help, !h                 =>  Sends the list of available commands.
+ 
+ DICE ROLLING
+  !r <x>d<y>                =>  Roll a "y" sided die "x" times. 
+  !r <x>d<y>x<z>            =>  Rolls "z" <x>d<y>'s. 
+ 
+ AUDIO
+  !play <audio_url> <?loop> =>  Play audio in current Voice Channel. End with 'loop' to loop
+  !playSound, ps <sound>    =>  Play audio in current Voice Channel. End with 'loop' to loop
+  !pause, !p                =>  Pauses current audio.
+  !resume, !r               =>  Resume current audio.
+  !stop, !s                 =>  Stop current audio without leaving the Voice Channel
+  !leave, !l                =>  Leave current Audio Channel.
+  !volume, !v <level>       =>  Modifies current audio volume. Max is 1.5 (150%).
+  !loop                     =>  Toggle Audio Looping
+ 
+ OTHER
+  !get, !g                  =>  Get audio info. 
+  !afk <reason>             =>  Sends away from keyboard message to channel.
 ```
 Note: To run audio commands, you will need [ffmpeg](https://ffmpeg.zeranoe.com/builds/) installed on your machine. 
 
