@@ -1,4 +1,4 @@
-# Biphy Bot
+# Project Headhunter: Biphy Bot
 
 ## Get Started
 
