@@ -2,8 +2,6 @@ const ytdl = require("ytdl-core");
 
 // Stream audio from YouTube using YTDL
 const play = async (message, audioPlayer, broadcast) => {
-  await broadcast.end();
-
   // Stop invoker isn't a voice Channel
   if (!message.member.voiceChannel) {
     await message.delete();
@@ -20,65 +18,51 @@ const play = async (message, audioPlayer, broadcast) => {
   if (args[2]) audioPlayer.looping = true;
   const msg = { ...message }; // Copy message object for recursive play calls
   broadcast.once("end", () => {
-    // console.log('Loop: ' + audioPlayer.looping);
-    // If Looping
     if (audioPlayer.looping) {
+      console.log("Looping");
+      broadcast.end();
       play(msg, audioPlayer, broadcast);
+    } else {
+      audioPlayer.connection = null;
+      audioPlayer.currentAudio = null;
+      audioPlayer.audioUrl = null;
+      audioPlayer.status = "Inactive";
     }
   });
 
-  // Clear broadcast to make room for a new one
-  // await broadcast.end();
-
   // Join Voice Channel of user who invoked the command
-  await message.member.voiceChannel
+  message.member.voiceChannel
     .join()
     .then(async (connection) => {
+      broadcast.end();
       if (!audioPlayer.voiceChannel)
         audioPlayer.voiceChannel = message.member.voiceChannel;
       if (!args[1]) return;
 
-      // Get Youtube Video Info
-
-      let info;
-      try {
-        console.log(args[1]);
-        info = await ytdl.getInfo(args[1]);
-      } catch (err) {
-        console.log(err);
-        return;
-      }
+      const info = await ytdl.getInfo(args[1]);
       const { title, video_url } = info;
-      // Convert Video to Stream
-      const stream = await ytdl(video_url, {
+      stream = await ytdl(video_url, {
         filter: "audioonly",
       });
+      audioPlayer.connection = connection;
+      audioPlayer.currentAudio = title;
+      audioPlayer.audioUrl = video_url;
+      audioPlayer.status = "Active";
 
-      // Clear & Send Message. Try catch message.delete because it might not persist through recursion
-      try {
-        if (!!message.delete) {
-          await message.delete();
-          await message.channel.send(
-            `${message.author}\`\`\`Now Playing: ${title}\n${video_url}${
-              audioPlayer.looping ? "\nLOOPING" : ""
-            }\`\`\``,
-          );
-        }
-      } catch (err) {
-        console.log(err.message);
+      if (!!message.delete) {
+        await message.delete();
+        await message.channel.send(
+          `${message.author}\`\`\`Now Playing: ${title}\n${video_url}${
+            audioPlayer.looping ? "\nLOOPING" : ""
+          }\`\`\``,
+        );
       }
 
       // Play Audio
       await broadcast.playStream(stream);
-      dispatcher = await connection.playBroadcast(broadcast);
+      const dispatcher = await connection.playBroadcast(broadcast);
       await dispatcher.setVolume(audioPlayer.volume);
-
-      // Set audioPlayer Information
-      audioPlayer.connection = connection;
       audioPlayer.dispatcher = dispatcher;
-      audioPlayer.currentAudio = title;
-      audioPlayer.audioUrl = video_url;
-      audioPlayer.status = "Active";
     })
     .catch(console.log);
 };
