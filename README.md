@@ -4,7 +4,7 @@
 
 1. Create a new application & bot at https://discordapp.com/developers/applications/.
 
-2. Under OAuth2, select the "Bot" scope and enable persmissions to `Send Messages`, `Manage Messages`, `Connect`, and `Speak`. 
+2. Under OAuth2, select the "Bot" scope and enable permissions to `Send Messages`, `Manage Messages`, `Connect`, and `Speak`. 
 
 3. Invite your bot to your server using the generated link. It should look something like this: https://discordapp.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=3155968&scope=bot.
 
